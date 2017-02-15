@@ -6,3 +6,6 @@ authors = ["Jaroslav Böhmer <joas1988@gmail.com>"]
 [dependencies]
 globset = "0.1"
 ruru = "0.9.0"
+
+[lib]
+crate-type = ["dylib"]

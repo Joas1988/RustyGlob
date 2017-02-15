@@ -1,14 +1,13 @@
-require "bundler/gem_tasks"
-require "rspec/core/rake_task"
+require 'bundler/gem_tasks'
+require 'thermite/tasks'
 
-RSpec::Core::RakeTask.new(:spec)
+thermite = Thermite::Tasks.new(cargo_project_path: File.join(File.dirname(__FILE__), 'ext', 'RustyGlob'))
 
-require "rake/extensiontask"
+task default: %w(thermite:build)
 
-task :build => :compile
-
-Rake::ExtensionTask.new("RustyGlob") do |ext|
-  ext.lib_dir = "lib/RustyGlob"
+desc 'Run testsuite'
+task test: %w(thermite:build thermite:test) do
+  test_file = File.join(File.dirname(__FILE__), 'spec', 'RustyGlob_spec.rb')
+  ruby "#{test_file} #{thermite.config.ruby_extension_path}"
+  spec test_file
 end
-
-task :default => [:clobber, :compile, :spec]

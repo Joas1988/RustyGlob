@@ -1,7 +1,9 @@
 require 'RustyGlob/version'
-require 'fiddle'
+require 'thermite/fiddle'
 
 module RustyGlob
-  library = Fiddle.dlopen("#{File.dirname(__FILE__)}/../rust/target/release/librusty_dir_glob.#{lib_ext}")
-  Fiddle::Function.new(library['initialize_dir'], [], Fiddle::TYPE_VOIDP).call
+  toplevel_dir = File.dirname(File.dirname(__FILE__))
+  Thermite::Fiddle.load_module('init_rusty_blank',
+                               cargo_project_path: File.join(toplevel_dir, 'ext/RustyGlob'),
+                               ruby_project_path: toplevel_dir)
 end
